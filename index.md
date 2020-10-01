@@ -1,37 +1,26 @@
-## Welcome to GitHub Pages
+<center>
+    Team members: Mitchell Stasko, Michael Verges, Max Zuo
+</center>
 
-You can use the [editor on GitHub](https://github.com/maxzuo/CS_4476_CV_Project/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+## Project Proposal
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+In the last several years, advances in computer vision and machine learning have led to significant improvements in object detection and instance segmentation algorithms. State-of-the-art deep learning models such as Mask R-CNN and even more recent approaches have improved accuracy while models like Faster R-CNN, MobileNet, and YOLO have pushed the boundaries for speed.
 
-### Markdown
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+As we continue to improve the capabilities of our computer vision systems, a logical next step from object detection is object tracking, an inherent capability in human and animal vision. Short-term and long-term object tracking remain open and challenging problems, as they require both sufficient accuracy and speed to be able to process video data in a reasonable amount of time. Object tracking algorithms may also require an understanding of object permanence in order to correctly handle scenarios with momentary object occlusion.
 
-```markdown
-Syntax highlighted code block
 
-# Header 1
-## Header 2
-### Header 3
+In this project, we will be exploring the effectiveness of a number of ROI object tracking algorithms, including KCF, CSRT, TLD, and others. Performance will be measured on both frames per second the algorithm can achieve as well as the accuracy of the algorithms measured using mean Average Precision (mAP) over the labeled dataset.
 
-- Bulleted
-- List
 
-1. Numbered
-2. List
+A success for this project would be having comparable data to say “object tracking algorithm x is the best because of these reasons determined through experimentation” or “all of these tracking algorithms are comparable in general but for specialties such as A, B, or C, algorithms X, Y, and Z excel respectively and here’s why with experimental data:”. Of course, we don’t currently know what the results would be but it’s an exciting prospect to take many people’s different ideas on how to solve the same problem and see just how the performance of these solutions differ and how each implementation could possibly lend itself to a different industry.
 
-**Bold** and _Italic_ and `Code` text
 
-[Link](url) and ![Image](src)
-```
+## References:
+[TrackingNet](https://tracking-net.org/)
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+[CSRT](https://arxiv.org/pdf/1611.08461)
 
-### Jekyll Themes
+[KCF](https://arxiv.org/abs/1404.7584)
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/maxzuo/CS_4476_CV_Project/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+[TLD](https://ieeexplore.ieee.org/document/6104061) and [e-TLD](https://arxiv.org/abs/2009.00855)
