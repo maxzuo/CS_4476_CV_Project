@@ -31,10 +31,11 @@ if __name__ == "__main__":
         # for drawing bounding box
         p1 = (int(bbox[0]), int(bbox[1]))
         p2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
+        print(bbox)
         cv2.rectangle(image, p1, p2, (255,0,0), 2, 1)
 
         cv2.imshow("test", image)
-
+        break
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 

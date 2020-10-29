@@ -127,13 +127,13 @@ def evaluate(user_submission_filenames:list, target_annotation_filenames:list):
     NPrecision = np.array(NPrecision_test_avg) / len(user_submission_filenames)
     Success = np.array(Success_test_avg) / len(user_submission_filenames)
 
-    Sanity_check_Average = np.mean(sanity_check_list)*100
+    # Sanity_check_Average = np.mean(sanity_check_list)*100
     Success_Average = np.trapz(Success, x=Success_X)*100
     Precision_Average = np.trapz(Precision, x=Success_X)*100
     NPrecision_Average = np.trapz(NPrecision, x=Success_X)*100
 
 
-    return Sanity_check_Average, Success_Average, Precision_Average, NPrecision_Average
+    return Success_Average, Precision_Average, NPrecision_Average
 
 
 

@@ -45,6 +45,7 @@ class Tracker(ABC):
         self.tracker = self.type()
 
     def _init_tracker(self, frame, bbox):
+        bbox = tuple(map(int, bbox))
         return self.tracker.init(frame, bbox)
 
     def predict_frames(self, frames, first_frame=None, bbox=None):

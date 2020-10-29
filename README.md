@@ -10,5 +10,7 @@ The `tracker` package is available for installation. To install using `pip`:
 ### Dependencies:
 * opencv-python
 * opencv-contrib-python>=4.4
+For running evaluation scripts:
+* tqdm
 
 You can install these using `pip install -r requirements.txt`. Installing `tracker` will also install these dependencies.
