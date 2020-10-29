@@ -9,12 +9,12 @@ class CSRT(Tracker):
 
 class KCF(Tracker):
     def __init__(self,frame=None,bbox=None,**kwargs):
-        __super__().__init__(cv2.TrackerKCF_create,**kwargs)
+        super().__init__(cv2.TrackerKCF_create,**kwargs)
         if frame is not None and bbox is not None:
             self._init_tracker(frame, bbox)
 
 class GOTURN(Tracker):
     def __init__(self,frame=None,bbox=None,**kwargs):
-        __super__().__init__(cv2.TrackerGOTURN_create,**kwargs)
+        super().__init__(cv2.TrackerGOTURN_create,**kwargs)
         if frame is not None and bbox is not None:
             self._init_tracker(frame, bbox)
