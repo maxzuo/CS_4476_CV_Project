@@ -26,7 +26,7 @@ if __name__ == "__main__":
     index = 1
     for image, (_, bbox) in track.predict_frames(video, bbox=first_bbox):
         if not index % 100:
-            print(track.avg_time_per_frame())
+            print(track.avg_time_per_frame()) # print average time per frame every 100 frames
         index += 1
         # for drawing bounding box
         p1 = (int(bbox[0]), int(bbox[1]))

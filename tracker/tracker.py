@@ -21,6 +21,7 @@ class Tracker(ABC):
 
         return object.__getattribute__(self, attr)
 
+    # invisible if timed is set to False
     def avg_time_per_frame(self):
         return self.time / self.frames
 
@@ -29,6 +30,7 @@ class Tracker(ABC):
         success, bbox = self.tracker.update(frame)
         return success, bbox
 
+    # invisible if timed is set to False
     def _timed_predict_frame(self, frame):
         t = timeit.default_timer()
         success, bbox = self.tracker.update(frame)
