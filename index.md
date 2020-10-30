@@ -54,16 +54,15 @@ Overall, we noticed a few trends in the results. For starters, occlusion took pe
 #### CSRT:
 Fully successful case:
 
-![CSRT Success Example](img/sample10.gif){: .result}
-
-Partially successful case:
-
 ![CSRT Example](img/sample3.gif){: .result}
 
+Partially successful cases:
+
+![CSRT Success Example](img/sample10.gif){: .result}
+![CSRT Example](img/sample.gif){: .result}
 
 Failure cases:
 
-![CSRT Example](img/sample.gif){: .result}
 ![CSRT Example](img/sample6.gif){: .result}
 
 *The blue boxes are the predicted bounding boxes, whereas the green is TrackingNet's ground truth*
