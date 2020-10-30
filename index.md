@@ -41,7 +41,21 @@ Overall, we noticed a few trends in the results of the experimentation. For star
 
 ## Qualitative results:
 #### CSRT:
+Success
+
 ![CSRT Success Example](img/sample10.gif)
+![CSRT Example](img/sample3.gif)
+![CSRT Example](img/sample5.gif)
+
+
+Failure
+
+![CSRT Example](img/sample.gif)
+![CSRT Example](img/sample6.gif)
+
+*The blue boxes are the predicted bounding boxes, whereas the green is TrackingNet's ground truth*
+
+
 
 ## Conclusion and future work:
 As already stated in the abstract, we saw not so promising results from CSRT tracking objects. Though, of course, no algorithm could perfectly track every object, CSRT does not do an accurate enough job to say it would outperform an untrained person. Some common themes and findings we saw were:
