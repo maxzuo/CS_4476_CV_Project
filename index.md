@@ -2,6 +2,9 @@
 .tablelines table, .tablelines td, .tablelines th {
     border: 1px solid black;
 }
+.result {
+    width: 33%;
+}
 </style>
 
 <center>
@@ -52,15 +55,15 @@ Overall, we noticed a few trends in the results of the experimentation. For star
 #### CSRT:
 Success
 
-![CSRT Success Example](img/sample10.gif)
-![CSRT Example](img/sample3.gif)
-![CSRT Example](img/sample5.gif)
+![CSRT Success Example](img/sample10.gif){: .result}
+![CSRT Example](img/sample3.gif){: .result}
+![CSRT Example](img/sample5.gif){: .result}
 
 
 Failure
 
-![CSRT Example](img/sample.gif)
-![CSRT Example](img/sample6.gif)
+![CSRT Example](img/sample.gif){: .result}
+![CSRT Example](img/sample6.gif){: .result}
 
 *The blue boxes are the predicted bounding boxes, whereas the green is TrackingNet's ground truth*
 
