@@ -14,53 +14,54 @@
 ## Project Update #1
 
 ## Abstract:
-Not only is it important to understand what an object is, it is useful to know where the object is. We wanted to use computer vision to help the process of tracking objects by examining popular object tracking techniques and making apples to apples comparisons. After studying the popular CSRT object tracking procedure, we implemented opencvs implementation of CSRT and ran it on a subset of the TrackingNet dataset, the largest, free object tracking dataset, to evaluate its implementation. We received informative results of decently inaccurate object tracking on the massive amount of data we ran the tracking on that took ~142 hours to fully execute.
+Not only is it important to understand what an object is, it is useful to know where the object is. We wanted to use computer vision to help the process of tracking objects by examining popular object tracking techniques and making apples to apples comparisons. After studying the popular CSRT object tracking procedure, we implemented opencvs implementation of CSRT and ran it on a subset of the TrackingNet dataset, the largest, free object tracking dataset, to evaluate its implementation. We received informative results of relatively inaccurate object tracking on the massive amount of data we ran the tracking on that took ~14 hours to fully execute.
 
-[teaser figure here]
+![CSRT Example](img/sample5.gif){: .result}
 
 
-## Introduction:
-Object tracking is an increasingly important part of the modern world as technology becomes more ubiquitous and cameras and computers see more of our every moves. Object tracking like such has applications in the field of surveillance, traffic flow analysis, self driving vehicles, crowd counting, audience flow analysis, and many more fields of human-computer interactions. So there is a massive motivation to determine the "best" approach to do this tracking and as such we sought to analyze one of the more recent and popular implementations of object tracking: CSRT. (Of course we'll analyze another object tracking algorithm in the future for apples to apples comparison).
+## Introduction: 
+Object tracking is an increasingly important part of the modern world as technology becomes more ubiquitous and cameras and computers see more of our every move. Object tracking like such has applications in the field of surveillance, traffic flow analysis, self driving vehicles, crowd counting, audience flow analysis, and many more fields of human-computer interactions. So there is a massive motivation to determine the "best" approach to do this tracking, and as such we sought to analyze one of the more recent and popular implementations of object tracking: CSRT. (Of course we'll analyze another object tracking algorithm in the future for apples to apples comparison).
 
-The particular domain we worked in was with videos (mp4s). To properly track an object, you must see both where it comes from and where it moves based off time so this format of analyzing videos was critical. In the problem space, one can think of videos as a set of frames aka images lined up based off of time. So this allowed us to analyze rgb images from videos after separating the video into frames.
+The particular domain we worked in was with videos. To properly track an object, you must see both where it comes from and where it moves based off of time, so this format of analyzing videos was critical. In the problem space, one can think of videos as a set of frames aka images lined up based off of time. This allowed us to analyze rgb images from videos after the videos were separated into frames.
 
-As stated, since we're using opencv’s library to implement this object tracking algorithm, the main difference in approach to this problem that our project tackles is tracking accuracy and efficiency of these algorithms as well as reading from an absolutely immense data set. Another difference in our approach was that the data set was so large we had to come up with our own metadata system to read directly from the zip file.
+As stated, since we're using opencv’s library to implement this object tracking algorithm, the main difference in approach to this problem that our project tackles is tracking accuracy and efficiency of these algorithms as well as reading from a large dataset. Another difference in our approach is that the dataset was so large that we had to build our own metadata system to read directly from the zip file.
 
 
 ## Approach:
-As we were looking to analyze an object tracking algorithm, we decided that one of the most key factors would be breadth of data tested. The more data we tested, the more statistically accurate the results would be. We used opencvs implementation of CSRT (Channel and Spatial Reliability Tracking) which uses underlying histograms of oriented gradients as well as colors. We quite uniquely linked up the TrackingNet dataset and TrackingNet's metrics with our own metric and this opencv implementation by having the algorithm read directly from the zipped up set of videos (>2,500 videos) that totalled 92 GB of storage.
+As we were looking to analyze an object tracking algorithm, we decided that one of the most key factors would be breadth of data tested. The more data we tested, the more statistically accurate the results would be. We used opencvs implementation of CSRT (Channel and Spatial Reliability Tracking) which uses underlying histograms of oriented gradients and colors. We quite uniquely linked the TrackingNet dataset and TrackingNet's metrics with our own metrics and opencv implementation by reading directly from the zipped set of videos (>2,500 videos totaling 92 GB) into our algorithm.
 
-One problem was tracking speed without affecting the actual speed. TrackingNet held no way to actually calculate the frames that could be analyzed in a second by the algorithm so we carefully wrote scripts to track this making sure that we did not greatly influence the time to complete by poorly written code for this timing. We also built a special kind of python generator that reduces the amount of memory required to run this analysis as it was maxing out our memory usage on our personal machines so special optimizations were required. The last major problem we solved was the massive 92 GB zipped file size for the >2,500 videos. We wrote a script that reads directly from the zip file to be more efficient in memory rather than unzipping the data to take from. On our laptops, we barely have enough room for the zipped data, let alone the even larger unzipped data.
+One problem was tracking speed without affecting the actual speed. TrackingNet holds no way of calculating the frames analyzed per second by the algorithm, so we carefully wrote scripts to track this, making sure not to impact the performance with the timing metric code . We also built a python generator that reduces the memory required to run this analysis, as it was maxing out our memory usage on our personal machines. The last major problem we solved was the massive 92 GB zipped file size for the >2,500 videos. We wrote a script that reads directly from the zip files to efficiently utilize memory (rather than unzipping the data to access). On our laptops, we barely have enough room for the zipped data, let alone the even larger unzipped data.
 
-We made one judgement call. We acknowledged that the absolute wealth of data in TrackingNet must take its initial first frame object bounding box from its own algorithm rather than hand designed so of course 100% accuracy to an already computer generated solution would be impossible.
+We made one judgement call. We acknowledged that the absolute wealth of data in TrackingNet must take its initial first frame object bounding box from its own algorithm rather than hand designed, so expecting 100% accuracy compared to computer-generated annotations would be impossible.
 
 ## Experiments and results:
-We used the massive TrackingNet dataset (link in references) for our experimentation. The size of such was roughly >2,500 videos. It was 92 GB zipped and too large for any of our laptops to handle unzipped. The data was entirely test data with no training data.
+We used a subset of the TrackingNet dataset (link in references) for our experimentation. The size of such was roughly >2,500 videos (92 GB zipped) and corresponding annotation files. For our use-case, the data was entirely test data and no training data.
 
-Evaluation metrics we used included: How many frames we can track per second, Success Average, Precision Average, and NPrecision Average. Taken directly from TrackingNet, the definition for the last three metrics are as follows (see TrackingNet metric paper in references): The success average is measured as the Intersection over Union (IoU) of the pixels between the ground truth bounding boxes and the ones generated by the tracker. The precision average is measured as the distance in pixels between the centers of the ground truth bounding box and the tracker's bounding box. The NPrecision Average is the precision average but normalized to take into account the size of the bounding box as different objects are different sizes in videos of course so just counting pixels won't be as accurate. Thus the more important of these two metrics are Success Average and NPrecision Average. But the most important and innovative out of all the metrics is our metric of how fast this object tracking can be accomplished for the algorithm.
-All of these were in consistent conditions because they were ran on the same 2018 Macbook Pro machine with an Intel Core i7-8559U processor.
-
-
+Evaluation metrics we used included: Frames Tracked per Second, Success Average, Precision Average, and NPrecision Average. Taken directly from TrackingNet, the definition for the last three metrics are as follows (see TrackingNet metric paper in references): The success average is measured as the Intersection over Union (IoU) of the pixels between the ground truth bounding boxes and the ones generated by the tracker. The precision average is measured as the distance in pixels between the centers of the ground truth bounding box and the tracker's bounding box. The NPrecision Average is the precision average but normalized to take into account the size of the bounding box as different objects are different sizes in videos of course so just counting pixels won't be as accurate. Thus the more important of these two metrics are Success Average and NPrecision Average. But the most important and innovative out of all the metrics is our metric of how fast this object tracking can be accomplished for the algorithm.
+All of these were in consistent conditions because they were run on the same 2018 Macbook Pro quad core machine with an Intel Core i7-8559U processor.
 | Model Name | Success Average | Precision Average | NPrecision Average | Frames per second | Frames computed |
 |------------|-----------------|-------------------|--------------------|-------------------|-----------------|
 | CSRT       | 44.39142        | 40.23581          | 50.20777           | 22.49346          | 1179026         |
 {: .tablelines}
 
 
-The only parameters necessary for this CSRT tracking were the video to track an object in and the bounding box for the object to be tracked in the first frame. There would not be enough time to individually adjust each bounding box but just for the sake of completeness we adjusted a few bounding boxes to notice effects of these parameters: every metric went down in value when the bounding box was set to a random, unimportant part of the image, and there appeared to be no noticeable difference between the metrics on larger and smaller bounding boxes on of course equally larger or smaller objects. As for changing which video was input, video resolution and size seemed to have little to no impact on algorithm performance
+The only parameters necessary for this CSRT tracking were the video to track an object in and the bounding box for the object to be tracked in the first frame. There would not be enough time to individually adjust each bounding box, but for the sake of completeness we adjusted a few bounding boxes to notice effects of these parameters: every metric went down in value when the bounding box was set to a random, unimportant part of the image, and there appeared to be no noticeable difference between the metrics on larger and smaller bounding boxes on of course equally larger or smaller objects. As for changing which video was input, video resolution and size seemed to have little to no impact on algorithm performance
 
-Overall, we noticed a few trends in the results of the experimentation. For starters, occlusion took perfectly working runs of the algorithm and threw them out the window. As the algorithm tracks the object from frame to frame, the object not existing in frame for a few frames destroys the accuracy.
+Overall, we noticed a few trends in the results. For starters, occlusion took perfectly-working runs of the algorithm and threw them out the window. As the algorithm tracks the object from frame to frame, the object not existing in frame for a few frames destroys the accuracy. Additionally, rotation of the object proved a challenge for the algorithm as well. Texture alone was not enough for the algorithm to properly track the object. These results are to be expected to some degree. If there was a tracking algorithm designed that could easily handle the hurdles of object rotation as well as occlusion, then no other algorithm would be needed or ever used. That, however, does not excuse the poor overall results as even though overcoming these hurdles was not to be expected, tackling them with some degree of precision is both desired and expected from an object tracking algorithm.
 
 ## Qualitative results:
+
 #### CSRT:
-Success
+Fully successful case:
 
 ![CSRT Success Example](img/sample10.gif){: .result}
+
+Partially successful case:
+
 ![CSRT Example](img/sample3.gif){: .result}
-![CSRT Example](img/sample5.gif){: .result}
 
 
-Failure
+Failure cases:
 
 ![CSRT Example](img/sample.gif){: .result}
 ![CSRT Example](img/sample6.gif){: .result}
@@ -68,15 +69,14 @@ Failure
 *The blue boxes are the predicted bounding boxes, whereas the green is TrackingNet's ground truth*
 
 
-
 ## Conclusion and future work:
-As already stated in the abstract, we saw not so promising results from CSRT tracking objects. Though, of course, no algorithm could perfectly track every object, CSRT does not do an accurate enough job to say it would outperform an untrained person. Some common themes and findings we saw were:
+As already stated in the abstract, we saw not-so-promising results from CSRT tracking objects. Though no algorithm could perfectly track every object, CSRT does not do an accurate enough job to outperform an untrained person. Some common themes and findings we saw were:
 
-Knowing the strengths and weaknesses of this CSRT object tracking could be very useful to companies or groups focused on self driving vehicles or surveillance because of the use cases of . Of course, this is also generalizable to human-computer interaction as a whole as having the most accurate tracking algorithm for any computer system involved in human affairs given that systems domain would be paramount.
+Knowing the strengths and weaknesses of this CSRT object tracking could be very useful to companies or groups focused on self driving vehicles or surveillance because of the applications of computer vision in these fields. Of course, this is also generalizable to human-computer interaction as a whole, as having the most accurate tracking algorithm for any computer system involved in human affairs given that systems domain would be paramount. 
 
-We would be able to say comfortably that CSRT cannot be trusted as an accurate object tracking algorithm, especially when occlusion is involved. As such, we would highly recommend self driving vehicles and surveillance companies and other businesses where accuracy is paramount do not use this object tracking algorithm. Less than 50% success average and normalized precision average is horrifically untrustable.
+From our results, we can not confidently trust CSRT as an accurate object tracking algorithm, especially when occlusion is involved. As such, we would highly recommend self driving vehicles and surveillance companies and other businesses where accuracy is paramount do not use this object tracking algorithm. Less than 50% success average and normalized precision average is horrifically untrustable.
 
-Our future work on the subject will focus on selecting another recent and praised tracking algorithm with already implemented code, namely KCF (Kernelized Correlation Filters) for comparison in statistics and findings between both algorithms on the same TrackingNet dataset to come to more conclusions of how each algorithm would fit in use cases as well as the general appeal and features of each algorithm. An apples to apples comparison. These findings were great but only with comparison data from a comparable algorithm on the same dataset, run on the same computer, will they be truly comprehensive.
+Our future work on the subject will focus on selecting another recent and praised tracking algorithm with already implemented code, namely KCF (Kernelized Correlation Filters). We will use KCF for comparing findings between both algorithms on the same dataset to better conclude how each algorithm would fit in use cases as well as the general appeal and features of each algorithm, an apples to apples comparison. These findings were great but only with comparison data from a comparable algorithm on the same dataset, run on the same computer, will they be truly comprehensive.
 
 
 ## References:
@@ -86,6 +86,6 @@ Our future work on the subject will focus on selecting another recent and praise
 
 [CSRT](https://arxiv.org/pdf/1611.08461)
 
-[KCF](https://arxiv.org/abs/1404.7584)
+<!-- [KCF](https://arxiv.org/abs/1404.7584)
 
-[TLD](https://ieeexplore.ieee.org/document/6104061) and [e-TLD](https://arxiv.org/abs/2009.00855)
+[TLD](https://ieeexplore.ieee.org/document/6104061) and [e-TLD](https://arxiv.org/abs/2009.00855) -->
