@@ -3,7 +3,7 @@
     border: 1px solid black;
 }
 .result {
-    width: 33%;
+    width: 30%;
 }
 </style>
 
