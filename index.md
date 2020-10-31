@@ -5,6 +5,11 @@
 .result {
     width: 30%;
 }
+.teaser {
+    display: block;
+    width: 45%;
+    margin: auto;
+}
 </style>
 
 <center>
@@ -16,10 +21,10 @@
 ## Abstract:
 Not only is it important to understand what an object is, it is useful to know where the object is. We wanted to use computer vision to help the process of tracking objects by examining popular object tracking techniques and making apples to apples comparisons. After studying the popular CSRT object tracking procedure, we implemented opencvs implementation of CSRT and ran it on a subset of the TrackingNet dataset, the largest, free object tracking dataset, to evaluate its implementation. We received informative results of relatively inaccurate object tracking on the massive amount of data we ran the tracking on that took ~14 hours to fully execute.
 
-![CSRT Example](img/sample5.gif){: .result}
+![CSRT Example](img/sample5.gif){: .teaser}
 
 
-## Introduction: 
+## Introduction:
 Object tracking is an increasingly important part of the modern world as technology becomes more ubiquitous and cameras and computers see more of our every move. Object tracking like such has applications in the field of surveillance, traffic flow analysis, self driving vehicles, crowd counting, audience flow analysis, and many more fields of human-computer interactions. So there is a massive motivation to determine the "best" approach to do this tracking, and as such we sought to analyze one of the more recent and popular implementations of object tracking: CSRT. (Of course we'll analyze another object tracking algorithm in the future for apples to apples comparison).
 
 The particular domain we worked in was with videos. To properly track an object, you must see both where it comes from and where it moves based off of time, so this format of analyzing videos was critical. In the problem space, one can think of videos as a set of frames aka images lined up based off of time. This allowed us to analyze rgb images from videos after the videos were separated into frames.
@@ -73,7 +78,7 @@ Failure cases:
 ## Conclusion and future work:
 As already stated in the abstract, we saw not-so-promising results from CSRT tracking objects. Though no algorithm could perfectly track every object, CSRT does not do an accurate enough job to outperform an untrained person. Some common themes and findings we saw were:
 
-Knowing the strengths and weaknesses of this CSRT object tracking could be very useful to companies or groups focused on self driving vehicles or surveillance because of the applications of computer vision in these fields. Of course, this is also generalizable to human-computer interaction as a whole, as having the most accurate tracking algorithm for any computer system involved in human affairs given that systems domain would be paramount. 
+Knowing the strengths and weaknesses of this CSRT object tracking could be very useful to companies or groups focused on self driving vehicles or surveillance because of the applications of computer vision in these fields. Of course, this is also generalizable to human-computer interaction as a whole, as having the most accurate tracking algorithm for any computer system involved in human affairs given that systems domain would be paramount.
 
 From our results, we can not confidently trust CSRT as an accurate object tracking algorithm, especially when occlusion is involved. As such, we would highly recommend self driving vehicles and surveillance companies and other businesses where accuracy is paramount do not use this object tracking algorithm. Less than 50% success average and normalized precision average is horrifically untrustable.
 
