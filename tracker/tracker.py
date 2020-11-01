@@ -1,5 +1,5 @@
 from abc import ABC
-import timeit
+import time
 
 class Tracker(ABC):
 
@@ -10,13 +10,14 @@ class Tracker(ABC):
 
         if timed:
             self.time = 0.
+            self.ptime = 0.
             self.frames = 0
             self.predict_frame = self._timed_predict_frame
         else:
             self.__getattribute__ = self._alt_getattr
 
     def _alt_getattr(self, attr):
-        if attr == "_timed_predict_frame" or attr == "avg_time_per_frame":
+        if attr == "_timed_predict_frame" or attr == "avg_time_per_frame" or attr == 'avg_cpu_time_per_frame':
             raise AttributeError
 
         return object.__getattribute__(self, attr)
@@ -25,6 +26,10 @@ class Tracker(ABC):
     def avg_time_per_frame(self):
         return self.time / self.frames
 
+    # used to calculate cpu time (not cycles per se) per frame
+    def avg_cpu_time_per_frame(self):
+        return self.ptime / self.frames
+
     # same as _timed_predict_frame without the timing overhead
     def predict_frame(self, frame):
         success, bbox = self.tracker.update(frame)
@@ -32,10 +37,12 @@ class Tracker(ABC):
 
     # invisible if timed is set to False
     def _timed_predict_frame(self, frame):
-        t = timeit.default_timer()
+        t = time.process_time()
+        t1 = time.perf_counter()
         success, bbox = self.tracker.update(frame)
 
-        self.time += timeit.default_timer() - t
+        self.ptime += time.process_time() - t
+        self.time += time.perf_counter() - t1
         self.frames += 1
 
         return success, bbox
