@@ -2,6 +2,8 @@ import os
 import glob
 import argparse
 import zipfile
+import platform
+import multiprocessing
 from multiprocessing import Pool
 
 import tqdm
@@ -57,6 +59,8 @@ def track(model:str, folder:str, outdir:str, processes:int=1):
     time = 0.
     ptime = 0.
     frames = 0
+    if platform.system() == "Darwin":
+        multiprocessing.set_start_method('spawn')
     with Pool(processes=processes) as p:
         with tqdm.tqdm(total=len(anno_files)) as pbar:
             args = [(model, anno_files[i], folder, outdir) for i in range(len(anno_files))]
