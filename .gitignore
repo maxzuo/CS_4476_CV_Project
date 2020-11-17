@@ -1,3 +1,11 @@
+# project specific
+*.mp4
+*.zip
+*.csv
+TRAIN_*
+test_output
+trackingnet
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

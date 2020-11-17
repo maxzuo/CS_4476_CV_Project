@@ -1,5 +1,6 @@
 from abc import ABC
 import time
+import timeit
 
 class Tracker(ABC):
 
@@ -38,11 +39,11 @@ class Tracker(ABC):
     # invisible if timed is set to False
     def _timed_predict_frame(self, frame):
         t = time.process_time()
-        t1 = time.perf_counter()
+        t1 = timeit.default_timer()
         success, bbox = self.tracker.update(frame)
 
         self.ptime += time.process_time() - t
-        self.time += time.perf_counter() - t1
+        self.time += timeit.default_timer() - t1
         self.frames += 1
 
         return success, bbox
