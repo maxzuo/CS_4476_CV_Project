@@ -73,7 +73,7 @@ def track(model:str, folder:str, outdir:str, processes:int=1):
     print("\n=======\nAvg tracking time per frame: %s\n=======\n" % (time / frames))
 
 
-    return time / ptime, ptime / frames, frames
+    return time / frames, ptime / frames, frames
 
 
 if __name__ == "__main__":
