@@ -58,9 +58,9 @@ All of these were in consistent conditions because they were run on the same 201
 
 The only parameters necessary for this CSRT and KCF tracking were the video to track an object in and the bounding box for the object to be tracked in the first frame. There would not be enough time to individually adjust each bounding box, but for the sake of completeness we adjusted a few bounding boxes to notice effects of these parameters: in both CSRT and KCF, every metric went down in value when the bounding box was set to a random, unimportant part of the image, and there appeared to be no noticeable difference between the metrics on larger and smaller bounding boxes on of course equally larger or smaller objects. As for changing which video was input, video resolution and size seemed to have little to no impact on algorithm performance for CSRT while it was ever so slightly more important for KCF. 
 
-Overall, we noticed a few trends in both algorithms’ results. For starters, occlusion took perfectly-working runs of the algorithm and threw them out the window. As the algorithm tracks the object from frame to frame, the object not existing in frame for a few frames destroys the accuracy. Additionally, rotation of the object proved a challenge for the algorithm as well. Texture alone was not enough for the algorithm to properly track the object. These results are to be expected to some degree. If there was a tracking algorithm designed that could easily handle the hurdles of object rotation as well as occlusion, then no other algorithm would be needed or ever used. 
+Overall, we noticed a few trends in both algorithms’ results. For starters, occlusion took perfectly-working runs of the algorithm and threw them out the window even if CSRT was more resistant to occlusion than KCF. As the algorithm tracks the object from frame to frame, the object not existing in frame for a few frames significantly affects the accuracy. Additionally, rotation of the object proved a challenge for the algorithm as well. Texture alone was not enough for the algorithm to properly track the object. These results are to be expected to some degree. If there was a tracking algorithm designed that could easily handle the hurdles of object rotation as well as occlusion, then no other algorithm would be needed or ever used. 
 
-Some individual trends that distinguished CSRT from KCF were: CSRT was way more resilient to similar objects entering frame that were not the object being tracked than KCF. Additionally, KCF was better at handling objects that disappeared from frames to reappear again later. While CSRT kept its old bounding box from where the object disappeared and waited for the object to return to that location, KCF removed the bounding box then readded it when the object was redetected.
+Some individual trends that distinguished CSRT from KCF were: CSRT was way more resilient to similar objects entering frame that were not the object being tracked than KCF as well as CSRT being able to handle occlusion more often than KCF albeit not always perfectly. Additionally, KCF was better at handling objects that disappeared from frames to reappear again later. While CSRT kept its old bounding box from where the object disappeared and waited for the object to return to that location, KCF removed the bounding box then readded it when the object was redetected.
 
 In an abbreviated conclusion about the metrics, CSRT’s object tracking has a degree of accuracy and precision that KCF just cannot match while KCF is of a speed near double CSRT. There seems to be a clear tradeoff between efficiency and accuracy.
 
@@ -100,7 +100,7 @@ Failure cases:
 *The blue boxes are the predicted bounding boxes, whereas the green is TrackingNet's ground truth*
 
 #### Side by side comparisons:
-![KCF Example](img/kcf5.gif){: .result} ![CSRT Example](img/csrt1.gif){: .result}
+![KCF Example](img/kcf5.gif){: .result} ![CSRT Example](img/csrt5.gif){: .result}
 ![KCF Example](img/kcf4.gif){: .result} ![CSRT Example](img/csrt4.gif){: .result}
 
 
