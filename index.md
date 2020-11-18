@@ -16,7 +16,7 @@
     Team members: Mitchell Stasko, Michael Verges, Max Zuo
 </center>
 
-## Project Update #1
+## Final Project Update
 
 ## Abstract:
 Not only is it important to understand what an object is, it is useful to know where the object is. We wanted to use computer vision to help the process of tracking objects by examining popular object tracking techniques and making apples to apples comparisons. After studying the popular CSRT object tracking procedure, we implemented opencvs implementation of CSRT and ran it on a subset of the TrackingNet dataset, the largest, free object tracking dataset, to evaluate its implementation. We did the same for KCF, implementing opencvs implementation and running it on the TrackingNet dataset. We received informative results of mildly inaccurate object tracking from CSRT and moderate to largely inaccurate object tracking from KCF on the massive amount of data we ran the tracking on that took ~24 hours on one thread to fully execute.
@@ -100,7 +100,10 @@ Failure cases:
 *The blue boxes are the predicted bounding boxes, whereas the green is TrackingNet's ground truth*
 
 #### Side by side comparisons:
+Plane:
 ![KCF Example](img/kcf5.gif){: .result} ![CSRT Example](img/csrt5.gif){: .result}
+
+Bus:
 ![KCF Example](img/kcf4.gif){: .result} ![CSRT Example](img/csrt4.gif){: .result}
 
 
