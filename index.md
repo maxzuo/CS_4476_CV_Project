@@ -19,21 +19,22 @@
 ## Project Update #1
 
 ## Abstract:
-Not only is it important to understand what an object is, it is useful to know where the object is. We wanted to use computer vision to help the process of tracking objects by examining popular object tracking techniques and making apples to apples comparisons. After studying the popular CSRT object tracking procedure, we implemented opencvs implementation of CSRT and ran it on a subset of the TrackingNet dataset, the largest, free object tracking dataset, to evaluate its implementation. We received informative results of relatively inaccurate object tracking on the massive amount of data we ran the tracking on that took ~14 hours to fully execute.
+Not only is it important to understand what an object is, it is useful to know where the object is. We wanted to use computer vision to help the process of tracking objects by examining popular object tracking techniques and making apples to apples comparisons. After studying the popular CSRT object tracking procedure, we implemented opencvs implementation of CSRT and ran it on a subset of the TrackingNet dataset, the largest, free object tracking dataset, to evaluate its implementation. We did the same for KCF, implementing opencvs implementation and running it on the TrackingNet dataset. We received informative results of mildly inaccurate object tracking from CSRT and moderate to largely inaccurate object tracking from KCF on the massive amount of data we ran the tracking on that took ~24 hours on one thread to fully execute.
+
 
 ![CSRT Example](img/sample5.gif){: .teaser}
 
 
 ## Introduction:
-Object tracking is an increasingly important part of the modern world as technology becomes more ubiquitous and cameras and computers see more of our every move. Object tracking like such has applications in the field of surveillance, traffic flow analysis, self driving vehicles, crowd counting, audience flow analysis, and many more fields of human-computer interactions. So there is a massive motivation to determine the "best" approach to do this tracking, and as such we sought to analyze one of the more recent and popular implementations of object tracking: CSRT. (Of course we'll analyze another object tracking algorithm in the future for apples to apples comparison).
+Object tracking is an increasingly important part of the modern world as technology becomes more ubiquitous and cameras and computers see more of our every move. Object tracking like such has applications in the field of surveillance, traffic flow analysis, self driving vehicles, crowd counting, audience flow analysis, and many more fields of human-computer interactions. So there is a massive motivation to determine the "best" approach to do this tracking, and as such we sought to analyze two of the more recent and popular implementations of object tracking: CSRT and KCF.
 
 The particular domain we worked in was with videos. To properly track an object, you must see both where it comes from and where it moves based off of time, so this format of analyzing videos was critical. In the problem space, one can think of videos as a set of frames aka images lined up based off of time. This allowed us to analyze rgb images from videos after the videos were separated into frames.
 
-As stated, since we're using opencv’s library to implement this object tracking algorithm, the main difference in approach to this problem that our project tackles is tracking accuracy and efficiency of these algorithms as well as reading from a large dataset. Another difference in our approach is that the dataset was so large that we had to build our own metadata system to read directly from the zip file.
+As stated, since we're using opencv’s library to implement these object tracking algorithms, the main difference in approach to this problem that our project tackles is tracking accuracy and efficiency of these algorithms as well as reading from a large dataset. Another difference in our approach is that the dataset was so large that we had to build our own metadata system to read directly from the zip file for each algorithm.
 
 
 ## Approach:
-As we were looking to analyze an object tracking algorithm, we decided that one of the most key factors would be breadth of data tested. The more data we tested, the more statistically accurate the results would be. We used opencvs implementation of CSRT (Channel and Spatial Reliability Tracking) which uses underlying histograms of oriented gradients and colors. We quite uniquely linked the TrackingNet dataset and TrackingNet's metrics with our own metrics and opencv implementation by reading directly from the zipped set of videos (>2,500 videos totaling 92 GB) into our algorithm.
+As we were looking to analyze object tracking algorithms, we decided that one of the most key factors would be breadth of data tested. The more data we tested, the more statistically accurate the results would be. We used opencvs implementation of CSRT (Channel and Spatial Reliability Tracking) which uses underlying histograms of oriented gradients and colors as well KCF (Kernelized Correlation Filters) which mainly relies on filtering and background subtraction. We quite uniquely linked the TrackingNet dataset and TrackingNet's metrics with our own metrics and opencv implementation by reading directly from the zipped set of videos (>2,500 videos totaling 92 GB) into our algorithm.
 
 One problem was tracking speed without affecting the actual speed. TrackingNet holds no way of calculating the frames analyzed per second by the algorithm, so we carefully wrote scripts to track this, making sure not to impact the performance with the timing metric code . We also built a python generator that reduces the memory required to run this analysis, as it was maxing out our memory usage on our personal machines. The last major problem we solved was the massive 92 GB zipped file size for the >2,500 videos. We wrote a script that reads directly from the zip files to efficiently utilize memory (rather than unzipping the data to access). On our laptops, we barely have enough room for the zipped data, let alone the even larger unzipped data.
 
@@ -49,12 +50,18 @@ All of these were in consistent conditions because they were run on the same 201
 | Model Name | Success Average | Precision Average | NPrecision Average | Frames per second | Frames computed |
 |------------|-----------------|-------------------|--------------------|-------------------|-----------------|
 | CSRT       | 44.39142        | 40.23581          | 50.20777           | 22.49346          | 1179026         |
+| KCF        | 34.99414        | 29.17041          | 37.6875            | 39.33432          | 1179026         |
 {: .tablelines}
 
 
-The only parameters necessary for this CSRT tracking were the video to track an object in and the bounding box for the object to be tracked in the first frame. There would not be enough time to individually adjust each bounding box, but for the sake of completeness we adjusted a few bounding boxes to notice effects of these parameters: every metric went down in value when the bounding box was set to a random, unimportant part of the image, and there appeared to be no noticeable difference between the metrics on larger and smaller bounding boxes on of course equally larger or smaller objects. As for changing which video was input, video resolution and size seemed to have little to no impact on algorithm performance
+The only parameters necessary for this CSRT and KCF tracking were the video to track an object in and the bounding box for the object to be tracked in the first frame. There would not be enough time to individually adjust each bounding box, but for the sake of completeness we adjusted a few bounding boxes to notice effects of these parameters: in both CSRT and KCF, every metric went down in value when the bounding box was set to a random, unimportant part of the image, and there appeared to be no noticeable difference between the metrics on larger and smaller bounding boxes on of course equally larger or smaller objects. As for changing which video was input, video resolution and size seemed to have little to no impact on algorithm performance for CSRT while it was ever so slightly more important for KCF. 
 
-Overall, we noticed a few trends in the results. For starters, occlusion took perfectly-working runs of the algorithm and threw them out the window. As the algorithm tracks the object from frame to frame, the object not existing in frame for a few frames destroys the accuracy. Additionally, rotation of the object proved a challenge for the algorithm as well. Texture alone was not enough for the algorithm to properly track the object. These results are to be expected to some degree. If there was a tracking algorithm designed that could easily handle the hurdles of object rotation as well as occlusion, then no other algorithm would be needed or ever used. That, however, does not excuse the poor overall results as even though overcoming these hurdles was not to be expected, tackling them with some degree of precision is both desired and expected from an object tracking algorithm.
+Overall, we noticed a few trends in both algorithms’ results. For starters, occlusion took perfectly-working runs of the algorithm and threw them out the window. As the algorithm tracks the object from frame to frame, the object not existing in frame for a few frames destroys the accuracy. Additionally, rotation of the object proved a challenge for the algorithm as well. Texture alone was not enough for the algorithm to properly track the object. These results are to be expected to some degree. If there was a tracking algorithm designed that could easily handle the hurdles of object rotation as well as occlusion, then no other algorithm would be needed or ever used. 
+
+Some individual trends that distinguished CSRT from KCF were: CSRT was way more resilient to similar objects entering frame that were not the object being tracked than KCF. Additionally, KCF was better at handling objects that disappeared from frames to reappear again later. While CSRT kept its old bounding box from where the object disappeared and waited for the object to return to that location, KCF removed the bounding box then readded it when the object was redetected.
+
+In an abbreviated conclusion about the metrics, CSRT’s object tracking has a degree of accuracy and precision that KCF just cannot match while KCF is of a speed near double CSRT. There seems to be a clear tradeoff between efficiency and accuracy.
+
 
 ## Qualitative results:
 
@@ -74,15 +81,31 @@ Failure cases:
 
 *The blue boxes are the predicted bounding boxes, whereas the green is TrackingNet's ground truth*
 
+#### KCF:
+Fully successful case:
+
+![CSRT Example](img/sample3.gif){: .result}
+
+Partially successful cases:
+
+![CSRT Success Example](img/sample10.gif){: .result}
+![CSRT Example](img/sample.gif){: .result}
+
+Failure cases:
+
+![CSRT Example](img/sample6.gif){: .result}
+
+*The blue boxes are the predicted bounding boxes, whereas the green is TrackingNet's ground truth*
+
 
 ## Conclusion and future work:
-As already stated in the abstract, we saw not-so-promising results from CSRT tracking objects. Though no algorithm could perfectly track every object, CSRT does not do an accurate enough job to outperform an untrained person. Some common themes and findings we saw were:
+As already stated in the abstract, we came to appreciate CSRTs accuracy in object tracking. We were too dismissive of CSRT in the first update. This around 50% precision and accuracy proved its value side by side when compared to some of the more horrid trackings from KCF. However, we also appreciated how KCF took a fraction of the time to run in comparison to CSRT. The filters’ speed cannot be overstated. Overall, some common themes and findings we saw were:
 
-Knowing the strengths and weaknesses of this CSRT object tracking could be very useful to companies or groups focused on self driving vehicles or surveillance because of the applications of computer vision in these fields. Of course, this is also generalizable to human-computer interaction as a whole, as having the most accurate tracking algorithm for any computer system involved in human affairs given that systems domain would be paramount.
+Knowing the strengths and weaknesses of these CSRT and KCF object trackings could be very useful to companies or groups focused on self driving vehicles or surveillance because of the applications of computer vision in these fields. Of course, this is also generalizable to human-computer interaction as a whole, as having the most accurate tracking algorithm for any computer system involved in human affairs given that systems domain would be paramount. 
 
-From our results, we can not confidently trust CSRT as an accurate object tracking algorithm, especially when occlusion is involved. As such, we would highly recommend self driving vehicles and surveillance companies and other businesses where accuracy is paramount do not use this object tracking algorithm. Less than 50% success average and normalized precision average is horrifically untrustable.
+As for the biggest trade offs, from our results, we can more confidently trust CSRT as an accurate object tracking algorithm with notable exception cases such as rotation and occlusion. As such, we would highly recommend self driving vehicles and surveillance companies and other businesses where accuracy is paramount use this object tracking algorithm instead of KCF. Less than 50% success average might not be that much, but it is leagues better than 35% success average. Paradoxically, we would recommend that these surveillance and self driving vehicle companies use KCF to properly parse the massive amount of data their systems receive every second to efficiently analyze all the data. So in total, the major flaw of each object tracking algorithm is clear and complementary. So if we were to really step in front of Google building their self driving cars or in front of the pentagon for surveillance tracking, we would propose some sort of hybrid of the two to handle data both efficiently and accurately while of course noting that the accuracy and speed may not be perfect but they are excellent in comparison to alternatives.
 
-Our future work on the subject will focus on selecting another recent and praised tracking algorithm with already implemented code, namely KCF (Kernelized Correlation Filters). We will use KCF for comparing findings between both algorithms on the same dataset to better conclude how each algorithm would fit in use cases as well as the general appeal and features of each algorithm, an apples to apples comparison. These findings were great but only with comparison data from a comparable algorithm on the same dataset, run on the same computer, will they be truly comprehensive.
+Our future work on the subject would focus on selecting another recent and praised tracking algorithm with already implemented code, namely TLD (Tracking Learning Detection) and its variants. We would use TLD for comparing findings between both of the previously compared algorithms on the same dataset to better conclude how each algorithm would fit in use cases as well as the general appeal and features of each algorithm, an apples to apples comparison. 
 
 
 ## References:
@@ -92,6 +115,6 @@ Our future work on the subject will focus on selecting another recent and praise
 
 [CSRT](https://arxiv.org/pdf/1611.08461)
 
-<!-- [KCF](https://arxiv.org/abs/1404.7584)
+[KCF](https://arxiv.org/abs/1404.7584)
 
-[TLD](https://ieeexplore.ieee.org/document/6104061) and [e-TLD](https://arxiv.org/abs/2009.00855) -->
+<!-- [TLD](https://ieeexplore.ieee.org/document/6104061) and [e-TLD](https://arxiv.org/abs/2009.00855) -->
