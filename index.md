@@ -24,6 +24,8 @@ Not only is it important to understand what an object is, it is useful to know w
 
 ![CSRT Example](img/sample5.gif){: .teaser}
 
+![KCF Example](img/kcf8.gif){: .teaser}
+
 
 ## Introduction:
 Object tracking is an increasingly important part of the modern world as technology becomes more ubiquitous and cameras and computers see more of our every move. Object tracking like such has applications in the field of surveillance, traffic flow analysis, self driving vehicles, crowd counting, audience flow analysis, and many more fields of human-computer interactions. So there is a massive motivation to determine the "best" approach to do this tracking, and as such we sought to analyze two of the more recent and popular implementations of object tracking: CSRT and KCF.
@@ -75,7 +77,7 @@ Partially successful cases:
 ![CSRT Success Example](img/sample10.gif){: .result}
 ![CSRT Example](img/sample.gif){: .result}
 
-Failure cases:
+Failure case:
 
 ![CSRT Example](img/sample6.gif){: .result}
 
@@ -84,18 +86,22 @@ Failure cases:
 #### KCF:
 Fully successful case:
 
-![CSRT Example](img/sample3.gif){: .result}
+![KCF Success](img/kcf7.gif){: .result}
 
-Partially successful cases:
+Partially successful case:
 
-![CSRT Success Example](img/sample10.gif){: .result}
-![CSRT Example](img/sample.gif){: .result}
+![KCF Example](img/kcf3.gif){: .result}
 
 Failure cases:
 
-![CSRT Example](img/sample6.gif){: .result}
+![KCF Failure](img/kcf1.gif){: .result}
+![KCF Failure](img/kcf2.gif){: .result}
 
 *The blue boxes are the predicted bounding boxes, whereas the green is TrackingNet's ground truth*
+
+#### Side by side comparisons:
+![KCF Example](img/kcf5.gif){: .result} ![CSRT Example](img/csrt1.gif){: .result}
+![KCF Example](img/kcf4.gif){: .result} ![CSRT Example](img/csrt4.gif){: .result}
 
 
 ## Conclusion and future work:
